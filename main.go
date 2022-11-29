@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"strings"
 
@@ -30,7 +29,7 @@ var (
 )
 
 func init() {
-	rootCmd.Version = fmt.Sprintf("Version: %s", version)
+	rootCmd.Version = "v" + version
 	rootCmd.PersistentFlags().StringVar(&configFile, "config", "default.tpl", "Template configuration file")
 	rootCmd.PersistentFlags().StringVar(&outputFile, "output", "default.bean", "File for saving results")
 }
@@ -47,7 +46,7 @@ func Run(dataFile string) error {
 	if err != nil {
 		return err
 	}
-	
+
 	data, err := GetData(dataFile)
 	if err != nil {
 		return err

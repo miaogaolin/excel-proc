@@ -4,7 +4,7 @@ excel-proc 处理 excel 数据，通过对数据的条件判断，使用模版�
 # 快速开始
 ## 例子
 编写模版配置文件，文件 `config.tpl` 内容如下：
-```tpl
+```
 ; ({col4} < 0) and ({col3} =~ "支付宝")
 2022-{{substr 0 2 .col2}}-{{substr 3 5 .col2}} *  "{{.col3}}"
   Expenses:Live {{.col4}} CNY
@@ -23,6 +23,8 @@ excel-proc 处理 excel 数据，通过对数据的条件判断，使用模版�
     3. `2022-{{substr 0 2 .col2}}-{{substr 3 5 .col2}}` 截取第二列的数据，将类似 "03/22" 处理为 "2022-03-22";
     4. `{{mul .col4 -1}}` 其中 mul 是个函数，表示第四列的数据乘以 -1;
     5. [更多函数](http://masterminds.github.io/sprig/)。
+
+更多的例子在 example 目录下。
 
 ## 安装 excel-proc
 ```shell
@@ -47,7 +49,7 @@ excel-proc 尽可能不修改 excel 数据内容，以增加不同数据的适�
 # 配置文件
 在上面的例子中，编写了一条完整的规则，倘若需要多对条件和模版，则只需要通过空行分开，如下：  
 
-```tpl
+```
 ; 条件1
 模版1
 
@@ -59,7 +61,7 @@ excel-proc 尽可能不修改 excel 数据内容，以增加不同数据的适�
 2. 如果 "条件1” 不成功则继续往下匹配查找，直到条件匹配成功；
 3. 如果不想使用条件，则可以省略，代表所有数据都是用一个模版内容。
 
-```tpl
+```
 模版1
 ```
 这个就只要一条模版内容，省略了条件，即时 “模版1” 后面空格相隔了多条 “模版” 内容也是不会应用，无效。
@@ -83,3 +85,6 @@ excel-proc 尽可能不修改 excel 数据内容，以增加不同数据的适�
 * `nand` 与非
 
 [更多详细](https://github.com/zhouzhuojie/conditions/blob/master/parser_test.go)
+
+# 模版
+模版的语法就是原版的 Go 语言模版语法，例如想增加 if 语句，也是可以的，只不过模版在此基础上扩展了 [sprig](http://masterminds.github.io/sprig/) 相关函数。
