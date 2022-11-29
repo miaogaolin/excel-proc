@@ -5,7 +5,7 @@ excel-proc 处理 excel 数据，通过对数据的条件判断，使用模版�
 ## 例子
 编写模版配置文件，文件 `config.tpl` 内容如下：
 ```tpl
-; ({col4} <> 0) and ({col3} =~ "支付宝")
+; ({col4} < 0) and ({col3} =~ "支付宝")
 2022-{{substr 0 2 .col2}}-{{substr 3 5 .col2}} *  "{{.col3}}"
   Expenses:Live {{.col4}} CNY
   Liabilities:CreditCard:CMB {{mul .col4 -1}} CNY
