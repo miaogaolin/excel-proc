@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"strings"
 
 	"github.com/spf13/cobra"
 )
@@ -46,7 +47,7 @@ func Run(dataFile string) error {
 	if err != nil {
 		return err
 	}
-
+	
 	data, err := GetData(dataFile)
 	if err != nil {
 		return err
@@ -59,6 +60,7 @@ func Run(dataFile string) error {
 			if num, ok := ConvertNum(v); ok {
 				rowData = append(rowData, num)
 			} else {
+				v = strings.TrimSpace(v)
 				rowData = append(rowData, v)
 			}
 
