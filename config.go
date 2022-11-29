@@ -43,16 +43,16 @@ func ReadConfig(path string) ([]Config, error) {
 
 		line++
 		text := scanner.Text()
-
+		trimText := strings.TrimSpace(text)
 		// 按照空行划分
-		if strings.TrimSpace(text) == "" && len(section) > 0 {
+		if trimText == "" && len(section) > 0 {
 			tmp, err := getSectionConfig(section)
 			if err != nil {
 				return nil, fmt.Errorf("line num %d, %v", line, err)
 			}
 			res = append(res, *tmp)
 			section = nil
-		} else {
+		} else if trimText != "" {
 			section = append(section, text)
 		}
 	}
