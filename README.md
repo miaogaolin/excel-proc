@@ -27,9 +27,9 @@ excel-proc 处理 excel 数据，通过对数据的条件判断，使用模版�
 ## 安装 excel-proc
 ```shell
 # Go 1.15 或更低版本
-go get -u githhub.com/miaogaolin/excel-proc
+go get -u github.com/miaogaolin/excel-proc
 # Go 1.16 或更高版本
-go install githhub.com/miaogaolin/excel-proc@latest
+go install github.com/miaogaolin/excel-proc@latest
 ```
 
 ## 运行
