@@ -65,23 +65,7 @@ func Validate(data map[string]interface{}, conditionExpr string) (bool, error) {
 }
 
 func (p *condition) Visit(tree antlr.ParseTree) interface{} {
-	switch d := tree.(type) {
-	case *GetNumExprContext:
-		return d.Accept(p)
-	case *ExprContext:
-		return d.Accept(p)
-	case *GetArrayExprContext:
-		return d.Accept(p)
-	case *GetStringExprContext:
-		return d.Accept(p)
-	case *AndOrContext:
-		return d.Accept(p)
-	case *ConditionKeyContext:
-		return d.Accept(p)
-	case *ParentContext:
-		return d.Accept(p)
-	}
-	return nil
+	return tree.Accept(p)
 }
 
 func (p *condition) VisitGetNumExpr(ctx *GetNumExprContext) interface{} {
