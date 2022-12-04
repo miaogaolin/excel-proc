@@ -40,6 +40,21 @@ excel-proc --config example/config.tpl example/data.csv
 ```
 默认会生成 `default.bean` 文件，可以通过 `--output` 参数指定输出文件名。
 
+在输出控制台也会出现如下信息：
+```shell
+[Warning] {col4} strconv.ParseFloat: parsing "RMB AMOUNT": invalid syntax: parse data error, condition=" ({col4} < 0) and ({col3} =~ "支付宝")", data=[SOLD POSTED DESCRIPTION RMB AMOUNT CARD NO(Last 4digits) Original Tran Amount]
+```
+警告：表示条件和数据之间是不能进行合理验证的，可忽略。
+
+```shell
+total count: 11
+ignore count: 9
+success count: 2
+```
+* total count:总共扫描 excel 的行数。
+* ignore count: 和条件不匹配，或者出现如上的 Warning 信息的总数量。
+* success count: 成果匹配的条件数。
+
 # 数据处理
 excel-proc 尽可能不修改 excel 数据内容，以增加不同数据的适配性，如下注意:
 
@@ -68,7 +83,6 @@ excel-proc 尽可能不修改 excel 数据内容，以增加不同数据的适�
 
 # 条件
 
-
 * `==` 两值相等，例: `{col1} == "hello"`
 * `!=` 两值不相等，例: `{col1} != "hello"`
 * `>`、`<` 数字判断，例：`{col1} > 1`
@@ -77,10 +91,16 @@ excel-proc 尽可能不修改 excel 数据内容，以增加不同数据的适�
 * `=~` 存在字符串中，例：`{col1} =~ "h"`
 * `!~` 不存在字符串中，例：`{col1} !~ "h"`
 
-如上的比较语句，如果之间需要逻辑与、或等这些必须用小括号包裹。
+如上的比较语句，之间需要验证如下：
 
-* `and` 与
-* `or` 或
+* `and` 与，表示两边的条件都满足
+* `or` 或，表示两边的条件满足其中一个即可
+
+使用小括号，调整优先级：
+```shell
+# 表示验证 {col2} == 2 and {col3} == 3
+{col1} == 1 or ({col2} == 2 and {col3} == 3)
+```
 
 
 # 模版
