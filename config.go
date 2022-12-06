@@ -5,15 +5,20 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"regexp"
 	"strings"
 )
 
-type Config struct {
-	Condition string
+type ConfigSection struct {
 	Template  string
+	Condition string
+}
+type Config struct {
+	Fields   map[string]string
+	Sections []ConfigSection
 }
 
-func ReadConfig(path string) ([]Config, error) {
+func ReadConfig(path string) (*Config, error) {
 	f, err := os.Open(path)
 	if err != nil {
 		return nil, err
@@ -23,11 +28,12 @@ func ReadConfig(path string) ([]Config, error) {
 	scanner := bufio.NewScanner(f)
 
 	var (
-		section []string
-		res     []Config
-		line    int
+		section        []string
+		configSections []ConfigSection
+		line           int
 	)
 
+	fields := map[string]string{}
 	for {
 		if !scanner.Scan() {
 			// 跳出前把 section 中的配置数据解析
@@ -36,35 +42,49 @@ func ReadConfig(path string) ([]Config, error) {
 				if err != nil {
 					return nil, fmt.Errorf("line num %d, %v", line, err)
 				}
-				res = append(res, *tmp)
+				configSections = append(configSections, *tmp)
 			}
 			break
 		}
-
 		line++
 		text := scanner.Text()
 		trimText := strings.TrimSpace(text)
+		// read fields
+		if len(section) == 0 && trimText != "" {
+			reg := regexp.MustCompile(`(\w+):\s*(?:"([^"]*)"|'([^']*)'|(\S+))`)
+			fieldsText := reg.FindSubmatch([]byte(trimText))
+			if len(fieldsText) == 5 {
+				fields[string(fieldsText[1])] = string(fieldsText[2]) + string(fieldsText[3]) + string(fieldsText[4])
+				continue
+			}
+
+		}
+
 		// 按照空行划分
 		if trimText == "" && len(section) > 0 {
 			tmp, err := getSectionConfig(section)
 			if err != nil {
 				return nil, fmt.Errorf("line num %d, %v", line, err)
 			}
-			res = append(res, *tmp)
+			configSections = append(configSections, *tmp)
 			section = nil
 		} else if trimText != "" {
 			section = append(section, text)
 		}
 	}
-	return res, nil
+
+	return &Config{
+		Sections: configSections,
+		Fields:   fields,
+	}, nil
 }
 
-func getSectionConfig(section []string) (*Config, error) {
+func getSectionConfig(section []string) (*ConfigSection, error) {
 	if len(section) == 0 {
 		return nil, errors.New("config is empty")
 	}
 
-	var cfg Config
+	var cfg ConfigSection
 	// have condition staement
 	if strings.HasPrefix(section[0], ";") {
 		cfg.Condition = strings.TrimLeft(section[0], ";")

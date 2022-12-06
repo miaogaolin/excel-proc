@@ -7,7 +7,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-const version = "0.0.2"
+const version = "0.1.0"
 
 var (
 	configFile string
@@ -42,7 +42,7 @@ func main() {
 }
 
 func Run(dataFile string) error {
-	configs, err := ReadConfig(configFile)
+	config, err := ReadConfig(configFile)
 	if err != nil {
 		return err
 	}
@@ -68,5 +68,5 @@ func Run(dataFile string) error {
 		SourceOrderData = append(SourceOrderData, rowData)
 	}
 
-	return Ouput(SourceOrderData, configs, outputFile)
+	return Ouput(SourceOrderData, config, outputFile)
 }

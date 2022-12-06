@@ -13,7 +13,11 @@ import (
 )
 
 // Ouput result  to file
-func Ouput(orders [][]interface{}, configs []Config, output string) error {
+func Ouput(orders [][]interface{}, config *Config, output string) error {
+	if config == nil {
+		return errors.New("config file is empty")
+	}
+
 	var ignore int
 	res := bytes.NewBuffer(nil)
 	for _, v := range orders {
@@ -22,9 +26,23 @@ func Ouput(orders [][]interface{}, configs []Config, output string) error {
 			colName := "col" + strconv.FormatInt(int64(i+1), 10)
 			data[colName] = col
 		}
+
+		// render fields data
+		for k, v := range config.Fields {
+			fieldRes := bytes.NewBuffer(nil)
+			tpl := template.Must(
+				template.New("fields template").Funcs(sprig.FuncMap()).Parse(v))
+			err := tpl.Execute(fieldRes, data)
+			if err != nil {
+				return errors.Wrapf(err, "template excute, %v", v)
+			}
+
+			data[k] = template.HTML(fieldRes.String())
+		}
+
 		// 验证每条数据和配置文件中哪个条件匹配
 		var isSuccess bool
-		for _, c := range configs {
+		for _, c := range config.Sections {
 			ok, err := validateConditon(data, c.Condition)
 			if err != nil {
 				if errors.Is(err, condition.ErrNotFoundCol) ||
