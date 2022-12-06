@@ -29,12 +29,14 @@ func Validate(data map[string]interface{}, conditionExpr string) (bool, error) {
 
 	lexer := NewConditionLexer(input)
 	lexer.RemoveErrorListeners()
+	lexer.AddErrorListener(conError)
 
 	// 新建一个此法符号的缓冲区，用于存储此法分析器将生成的词法符号
 	tokens := antlr.NewCommonTokenStream(lexer, antlr.LexerDefaultTokenChannel)
 
 	// 新建一个语法分析器，处理词法符号缓冲区中的内容
 	parser := NewConditionParser(tokens)
+	parser.SetErrorHandler(antlr.NewDefaultErrorStrategy())
 	parser.RemoveErrorListeners()
 	parser.AddErrorListener(conError)
 

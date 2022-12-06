@@ -41,6 +41,8 @@ func TestValidate(t *testing.T) {
 			`{col1} =～ "aaa"`}, false, true},
 		{"error", args{map[string]interface{}{"col4": "哈哈哈", "col3": "支付宝111"},
 			`{col4} < 0 and {col3} =~ "支付宝"`}, false, true},
+		{"error ==~", args{map[string]interface{}{"col2": "aaaccaaa"},
+			`{col2} ==~ "cc"`}, false, true},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
