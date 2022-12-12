@@ -51,7 +51,7 @@ func Ouput(orders [][]interface{}, config *config.Config, output string) error {
 				if errors.Is(err, condition.ErrNotFoundCol) ||
 					errors.Is(err, condition.ErrParseData) {
 					d, _ := json.Marshal(data)
-					fmt.Printf("[Warning] line:%v, %v \n condition: %v, \n data: %v\n", c.ConditionLine, err, c.Condition, string(d))
+					fmt.Printf("[Warning] line:%v, %v\n condition: %v\n data: %v\n", c.ConditionLine, err, c.Condition, string(d))
 					break
 				}
 				return fmt.Errorf(`[Error] line:%v, %v, condition="%v"`, c.ConditionLine, err, c.Condition)

@@ -43,7 +43,9 @@ excel-proc --config example/config.tpl example/data.csv
 
 在输出控制台也会出现如下信息：
 ```shell
-[Warning] {col4} strconv.ParseFloat: parsing "RMB AMOUNT": invalid syntax: parse data error, condition=" ({col4} < 0) and ({col3} =~ "支付宝")", data=[SOLD POSTED DESCRIPTION RMB AMOUNT CARD NO(Last 4digits) Original Tran Amount]
+[Warning] line:1, {col4} strconv.ParseFloat: parsing "人民币金额": invalid syntax: parse data error 
+ condition:  ({col4} < 0) and ({col3} =~ "支付宝")
+ data: {"col1":"交易日","col2":"记账日","col3":"交易摘要","col4":"人民币金额","col5":"卡号末四位","col6":"交易地金额"}
 ```
 警告：表示条件和数据之间是不能进行合理验证的，可忽略。
 
@@ -119,4 +121,4 @@ field1: "公共模板内容"
 {{.field1}}
 模板2
 ```
-`field1` 就是公共的模板内容，这个字段名自定义，可使用 "双引号" 或 "单引号" 赋值。
+* `field1` 就是公共的模板内容，这个字段名自定义，可使用 "双引号" 或 "单引号" 赋值，并且引号中的内容可以换行。
