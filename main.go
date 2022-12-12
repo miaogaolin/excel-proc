@@ -4,6 +4,8 @@ import (
 	"log"
 	"strings"
 
+	"github.com/miaogaolin/excel-proc/config"
+	"github.com/miaogaolin/excel-proc/utils"
 	"github.com/spf13/cobra"
 )
 
@@ -42,7 +44,7 @@ func main() {
 }
 
 func Run(dataFile string) error {
-	config, err := ReadConfig(configFile)
+	config, err := config.ReadConfig(configFile)
 	if err != nil {
 		return err
 	}
@@ -56,7 +58,7 @@ func Run(dataFile string) error {
 	for _, cols := range data {
 		var rowData []interface{}
 		for _, v := range cols {
-			if num, ok := ConvertNum(v); ok {
+			if num, ok := utils.ConvertNum(v); ok {
 				rowData = append(rowData, num)
 			} else {
 				v = strings.TrimSpace(v)

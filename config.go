@@ -7,6 +7,8 @@ import (
 	"os"
 	"regexp"
 	"strings"
+
+	"github.com/miaogaolin/excel-proc/utils"
 )
 
 type ConfigSection struct {
@@ -94,7 +96,7 @@ func getSectionConfig(section []string) (*ConfigSection, error) {
 		section = section[1:]
 	}
 	for _, v := range section {
-		cfg.Template += v + LineSeperator()
+		cfg.Template += v + utils.LineSeperator()
 	}
 	return &cfg, nil
 }

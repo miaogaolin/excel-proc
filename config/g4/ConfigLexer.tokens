@@ -1,0 +1,11 @@
+T__0=1
+T__1=2
+ID=3
+COMMENT=4
+NL=5
+FLOAT=6
+DEC=7
+STRING=8
+OTHER=9
+' '=1
+':'=2

@@ -1,40 +1,24 @@
-grammar Condition;
+grammar Config;
 
-expr:
-	expr op = (AND | OR) expr									# AndOr
-	| conditionKey op = (IN | NOTIN) array						# GetArrayExpr
-	| conditionKey op = (LIKE | NOTLIKE | EQ | NOTEQ) STRING	# GetStringExpr
-	| conditionKey op = (EQ | GT | LT | NOTEQ) number			# GetNumExpr
-	| '(' expr ')'												# Parent;
+stat: NL* fields NL* sections  # FieldStat
+| NL* sections # NotFieldStat
+;
 
-conditionKey: '{' COL '}';
+sections: (NL* section NL*)+;
+section: .+? (NL NL | EOF) # GetSection;
 
-array:
-	'[' STRING (',' STRING)* ']' // 字符串数组
-	| '[' number (',' number)* ']'; // 数字数组
-number: FLOAT | DEC;
+fields: (field NL+)+;
+field: fieldName ' '* ':' ' '* fieldValue;
+fieldName: ID DEC?;
+fieldValue: STRING | FLOAT | DEC;
 
-LIKE: '=~';
-NOTLIKE: '!~';
-EQ: '==';
-NOTEQ: '!=';
-GT: '>';
-LT: '<';
-IN: I N;
-NOTIN: NOT ' '? IN;
-NOT: N O T;
-AND: A N D;
-OR: O R;
-COL: 'col' DEC;
-
-ID: [a-zA-Z]+;
+ID: [a-zA-Z_][a-zA-Z_0-9]*;
 COMMENT: '//' ~[\r\n]* -> skip;
 NL: '\r'? '\n';
 FLOAT: DIGIT+ '.' DIGIT* | '.' DIGIT+;
 DEC: DIGIT+;
 STRING: '"' (ESC | .)*? '"' | '\'' (ESC | .)*? '\'';
-WS: [ \t\r\n]+ -> skip;
-
+OTHER: .;
 // fragment 表示只能由词法调用
 fragment ESC: '\\"' | '\\\\';
 // 匹配字符\"和\\

@@ -2,18 +2,21 @@ package main
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"html/template"
 	"os"
 	"strconv"
 
 	"github.com/Masterminds/sprig"
-	"github.com/miaogaolin/excel-proc/condition"
+	"github.com/miaogaolin/condition"
+	"github.com/miaogaolin/excel-proc/config"
+	"github.com/miaogaolin/excel-proc/utils"
 	"github.com/pkg/errors"
 )
 
 // Ouput result  to file
-func Ouput(orders [][]interface{}, config *Config, output string) error {
+func Ouput(orders [][]interface{}, config *config.Config, output string) error {
 	if config == nil {
 		return errors.New("config file is empty")
 	}
@@ -47,10 +50,11 @@ func Ouput(orders [][]interface{}, config *Config, output string) error {
 			if err != nil {
 				if errors.Is(err, condition.ErrNotFoundCol) ||
 					errors.Is(err, condition.ErrParseData) {
-					fmt.Printf(`[Warning] %v, condition="%v", data=%v`, err, c.Condition, v)
+					d, _ := json.Marshal(data)
+					fmt.Printf("[Warning] line:%v, %v \n condition: %v, \n data: %v\n", c.ConditionLine, err, c.Condition, string(d))
 					break
 				}
-				return fmt.Errorf(`[Error] %v, condition="%v"`, err, c.Condition)
+				return fmt.Errorf(`[Error] line:%v, %v, condition="%v"`, c.ConditionLine, err, c.Condition)
 			}
 			if ok {
 				// 渲染模版数据
@@ -61,16 +65,17 @@ func Ouput(orders [][]interface{}, config *Config, output string) error {
 					return errors.Wrap(err, "template excute")
 				}
 				isSuccess = true
+				res.Write([]byte(utils.LineSeperator()))
 				break
 			}
 		}
-
 		if !isSuccess {
 			ignore++
 		}
 	}
 
 	fmt.Printf(`
+-------------------
 total count: %d
 ignore count: %d
 success count: %d
@@ -87,7 +92,6 @@ func validateConditon(data map[string]interface{}, conditionExpr string) (bool, 
 	// Evaluate expression passing data for $vars
 	r, err := condition.Validate(data, conditionExpr)
 	if err != nil {
-		fmt.Println(data, "\n", conditionExpr)
 		return false, err
 	}
 	return r, nil

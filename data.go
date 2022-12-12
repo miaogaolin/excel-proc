@@ -5,6 +5,7 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/miaogaolin/excel-proc/utils"
 	"github.com/pkg/errors"
 	"github.com/xuri/excelize/v2"
 )
@@ -14,7 +15,7 @@ var dataFileExt = []string{".csv", ".xlam", ".xlsm", ".xlsx", ".xltm ", ".ltx"}
 func GetData(filename string) ([][]string, error) {
 	// verfiy excel file
 	ext := filepath.Ext(filename)
-	if !InSliceString(ext, dataFileExt) {
+	if !utils.InSliceString(ext, dataFileExt) {
 		return nil, errors.Errorf("no excel file, supported file ext %v", dataFileExt)
 	}
 

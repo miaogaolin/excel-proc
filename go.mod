@@ -5,6 +5,7 @@ go 1.18
 require (
 	github.com/Masterminds/sprig v2.22.0+incompatible
 	github.com/antlr/antlr4/runtime/Go/antlr/v4 v4.0.0-20221202181307-76fa05c21b12
+	github.com/miaogaolin/condition v0.0.0-20221209024342-020d536b1281
 	github.com/pkg/errors v0.9.1
 	github.com/spf13/cobra v1.6.1
 	github.com/xuri/excelize/v2 v2.6.1
@@ -13,6 +14,7 @@ require (
 require (
 	github.com/Masterminds/goutils v1.1.1 // indirect
 	github.com/Masterminds/semver v1.5.0 // indirect
+	github.com/antlr/antlr4/runtime/Go/antlr v1.4.10 // indirect
 	github.com/google/uuid v1.3.0 // indirect
 	github.com/huandu/xstrings v1.3.3 // indirect
 	github.com/imdario/mergo v0.3.13 // indirect
