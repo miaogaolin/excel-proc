@@ -54,7 +54,7 @@ func Ouput(orders [][]interface{}, config *config.Config, output string) error {
 					fmt.Printf("[Warning] line:%v, %v\n condition: %v\n data: %v\n", c.ConditionLine, err, c.Condition, string(d))
 					break
 				}
-				return fmt.Errorf(`[Error] line:%v, %v, condition="%v"`, c.ConditionLine, err, c.Condition)
+				return fmt.Errorf(`[Error] line:%v, %v, condition=%v`, c.ConditionLine, err, c.Condition)
 			}
 			if ok {
 				// 渲染模版数据
@@ -74,12 +74,11 @@ func Ouput(orders [][]interface{}, config *config.Config, output string) error {
 		}
 	}
 
-	fmt.Printf(`
--------------------
+	fmt.Printf(`-------------------
 total count: %d
 ignore count: %d
 success count: %d
-	`, len(orders), ignore, len(orders)-ignore)
+`, len(orders), ignore, len(orders)-ignore)
 	return os.WriteFile(output, res.Bytes(), 0777)
 }
 

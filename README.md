@@ -101,7 +101,6 @@ excel-proc 尽可能不修改 excel 数据内容，以增加不同数据的适�
 
 使用小括号，调整优先级：
 ```shell
-# 表示验证 {col2} == 2 and {col3} == 3
 {col1} == 1 or ({col2} == 2 and {col3} == 3)
 ```
 
