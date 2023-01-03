@@ -9,6 +9,8 @@ require (
 	github.com/pkg/errors v0.9.1
 	github.com/spf13/cobra v1.6.1
 	github.com/xuri/excelize/v2 v2.6.1
+	golang.org/x/net v0.2.0
+	golang.org/x/text v0.4.0
 )
 
 require (
@@ -30,6 +32,4 @@ require (
 	github.com/xuri/nfp v0.0.0-20220409054826-5e722a1d9e22 // indirect
 	golang.org/x/crypto v0.3.0 // indirect
 	golang.org/x/exp v0.0.0-20220722155223-a9213eeb770e // indirect
-	golang.org/x/net v0.2.0 // indirect
-	golang.org/x/text v0.4.0 // indirect
 )

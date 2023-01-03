@@ -23,7 +23,19 @@ func Ouput(orders [][]interface{}, config *config.Config, output string) error {
 
 	var ignore int
 	res := bytes.NewBuffer(nil)
+
+	var maxColumn int
 	for _, v := range orders {
+		if len(v) > maxColumn {
+			maxColumn = len(v)
+		}
+	}
+
+	for _, v := range orders {
+		if len(v) != maxColumn {
+			ignore++
+			continue
+		}
 		data := map[string]interface{}{}
 		for i, col := range v {
 			colName := "col" + strconv.FormatInt(int64(i+1), 10)
@@ -37,7 +49,7 @@ func Ouput(orders [][]interface{}, config *config.Config, output string) error {
 				template.New("fields template").Funcs(sprig.FuncMap()).Parse(v))
 			err := tpl.Execute(fieldRes, data)
 			if err != nil {
-				return errors.Wrapf(err, "template excute, %v", v)
+				return errors.Wrapf(err, "template excute, template=%v, data=%v", v, data)
 			}
 
 			data[k] = template.HTML(fieldRes.String())
@@ -51,10 +63,10 @@ func Ouput(orders [][]interface{}, config *config.Config, output string) error {
 				if errors.Is(err, condition.ErrNotFoundCol) ||
 					errors.Is(err, condition.ErrParseData) {
 					d, _ := json.Marshal(data)
-					fmt.Printf("[Warning] line:%v, %v\n condition: %v\n data: %v\n", c.ConditionLine, err, c.Condition, string(d))
+					fmt.Printf("[Warning] config file, line:%v, %v\n condition: %v\n data: %v\n", c.ConditionLine, err, c.Condition, string(d))
 					break
 				}
-				return fmt.Errorf(`[Error] line:%v, %v, condition=%v`, c.ConditionLine, err, c.Condition)
+				return fmt.Errorf(`[Error] config file, line:%v, %v, condition=%v`, c.ConditionLine, err, c.Condition)
 			}
 			if ok {
 				// 渲染模版数据
@@ -62,7 +74,7 @@ func Ouput(orders [][]interface{}, config *config.Config, output string) error {
 					template.New("base").Funcs(sprig.FuncMap()).Parse(c.Template))
 				err := tpl.Execute(res, data)
 				if err != nil {
-					return errors.Wrap(err, "template excute")
+					return errors.Wrapf(err, "template excute, template=%v, data=%v", c.Template, data)
 				}
 				isSuccess = true
 				res.Write([]byte(utils.LineSeperator()))
