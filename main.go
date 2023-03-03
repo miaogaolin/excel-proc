@@ -9,7 +9,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-const version = "0.1.2"
+const version = "0.1.3"
 
 var (
 	configFile string
@@ -58,7 +58,7 @@ func Run(dataFile string) error {
 	for _, cols := range data {
 		var rowData []interface{}
 		for _, v := range cols {
-			if num, ok := utils.ConvertNum(v); ok {
+			if num, err := utils.GetMoneyNum(v); err == nil {
 				rowData = append(rowData, num)
 			} else {
 				v = strings.TrimSpace(v)
