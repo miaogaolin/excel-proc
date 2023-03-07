@@ -8,7 +8,7 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/Masterminds/sprig"
+	"github.com/Masterminds/sprig/v3"
 	"github.com/miaogaolin/condition"
 	"github.com/miaogaolin/excel-proc/config"
 	"github.com/miaogaolin/excel-proc/utils"

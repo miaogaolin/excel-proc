@@ -8,7 +8,7 @@ excel-proc 处理 excel 数据，通过对数据的条件判断，使用模版�
 ; ({col4} < 0) and ({col3} =~ "支付宝")
 2022-{{substr 0 2 .col2}}-{{substr 3 5 .col2}} *  "{{.col3}}"
   Expenses:Live {{.col4}} CNY
-  Liabilities:CreditCard:CMB {{mul .col4 -1}} CNY
+  Liabilities:CreditCard:CMB {{mulf .col4 -1}} CNY
 ```
 
 * 第一行，必须 “;” 开头，定义 excel 数据的筛选条件。
@@ -21,7 +21,7 @@ excel-proc 处理 excel 数据，通过对数据的条件判断，使用模版�
     1. `{{.col1}}` 填充第一列数据;
     2. `{{.col2}}`、`{{.col3}}` 等等都表示填充数据;
     3. `2022-{{substr 0 2 .col2}}-{{substr 3 5 .col2}}` 截取第二列的数据，将类似 "03/22" 处理为 "2022-03-22";
-    4. `{{mul .col4 -1}}` 其中 mul 是个函数，表示第四列的数据乘以 -1;
+    4. `{{mulf .col4 -1}}` 其中 mulf 是个函数，表示第四列的数据乘以 -1;
     5. [更多函数](http://masterminds.github.io/sprig/)。
 
 更多的例子在 example 目录下。
