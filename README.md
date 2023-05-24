@@ -1,5 +1,8 @@
+
 excel-proc 处理 excel 数据，通过对数据的条件判断，使用模版内容组装自己想要的内容结果。
 该工具的灵感来源于处理 “流水账单” 转化为 beancount 交易文件。
+
+**不想使用命令行的，推荐使用我新开发的 APP: [github.com/miaogaolin/ExcelMate](https://github.com/miaogaolin/ExcelMate)**
 
 # 快速开始
 ## 例子
